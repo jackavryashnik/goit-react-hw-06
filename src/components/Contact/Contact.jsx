@@ -1,19 +1,30 @@
 import { IoPersonSharp } from 'react-icons/io5';
 import { FaPhoneAlt } from 'react-icons/fa';
-import css from './Contact.module.css'
+import css from './Contact.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from '../../redux/contactsSlice';
 
-const Contact = ({ contact: { id, name, number }, onDelete }) => {
+const Contact = ({ id }) => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
+  const contact = contacts.filter(e => (e.id = id));
+
   return (
     <li className={css.contact}>
       <div className={css.contactInfo}>
         <p>
-          <IoPersonSharp /> {name}
+          <IoPersonSharp /> {contact.name}
         </p>
         <p>
-          <FaPhoneAlt /> {number}
+          <FaPhoneAlt /> {contact.number}
         </p>
       </div>
-      <button className={css.btn} onClick={() => onDelete(id)}>Delete</button>
+      <button
+        className={css.btn}
+        onClick={() => dispatch(deleteContact(contact))}
+      >
+        Delete
+      </button>
     </li>
   );
 };
